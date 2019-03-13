@@ -1,0 +1,122 @@
+version: 2.1
+
+description: "Common CircleCI tasks for Hugo."
+
+executors:
+  cibuilds:
+    description: "The cibuilds/hugo Docker image."
+    parameters:
+      tag:
+        description: "The `cibuilds/hugo` Docker image version tag."
+        type: string
+        default: "latest"
+    docker:
+      - image: cibuilds/hugo:<< parameters.tag >>
+
+commands:
+  install:
+    description: "Install the Hugo binary into your build."
+    parameters:
+      version:
+        description: "The Hugo version."
+        type: string
+      extended:
+        description: "Install the Hugo extended binary?"
+        type: boolean
+        default: true
+    steps:
+      - run:
+          name: "Install Hugo"
+          command: |
+            # If we're in Alpine, install additional compatibility packages.
+            if [ -f /etc/alpine-release ]; then
+              apk add build-base curl libcurl libc6-compat libxml2-dev libxslt-dev
+            fi
+
+            if [ << parameters.extended >> = true ]; then
+              HUGO_EXTENDED="_extended"
+            else
+              HUGO_EXTENDED=""
+            fi
+
+            HUGO_URL=https://github.com/gohugoio/hugo/releases/download/v<< parameters.version >>/hugo${HUGO_EXTENDED}_<< parameters.version >>_Linux-64bit.tar.gz
+
+            curl -sSL "$HUGO_URL" | tar -xz -C /usr/local/bin hugo
+  hugo-build:
+    description: "Builds with Hugo a static site located at 'source'. The default is '.'."
+    parameters:
+      source:
+        description: "Path to Hugo root relative to working_directory."
+        type: string
+        default: "."
+      destination:
+        description: "Path to where Hugo outputs generated site. Relative to `source`."
+        type: string
+        default: "public"
+      hugo-env:
+        description: "Set the value of HUGO_ENV prior to running Hugo."
+        type: string
+        default: "production"
+    steps:
+      - run:
+          name: "Build with Hugo"
+          command: "HUGO_ENV=<< parameters.hugo-env >> hugo -v -s << parameters.source >> -d << parameters.destination >>"
+  html-proofer:
+    description: "Runs HTML Proofer on 'path' to check for html errors. Ruby and the `html-proofer` gem must already be installed to use."
+    parameters:
+      path:
+        description: "Path to generated files relative to working_directory."
+        type: string
+    steps:
+      - run:
+          name: "Test generated website with HTML Proofer."
+          command: "htmlproofer << parameters.path >> --allow-hash-href --check-html --empty-alt-ignore --disable-external"
+
+jobs:
+  build:
+    description: "Build a site with Hugo."
+    executor:
+      name: cibuilds
+      tag: << parameters.version >>
+    parameters:
+      version:
+        description: "Hugo version to use. Defaults to latest."
+        type: string
+        default: latest
+      source:
+        description: "Path to Hugo root relative to working_directory."
+        type: string
+        default: "."
+      destination:
+        description: "Path to where Hugo outputs generated site. Relative to `source`."
+        type: string
+        default: "public"
+      html-proofer:
+        description: "Whether or not to test the outputted HTML with HTML Proofer."
+        type: boolean
+        default: true
+      persist-to-workspace:
+        description: "Whether to persist generated files to a CircleCI Workspace. This uses `parameters.source` as root and `parameters.publishdir` as the path."
+        type: boolean
+        default: true
+      hugo-env:
+        description: "Set the value of HUGO_ENV prior to running Hugo."
+        type: string
+        default: "production"
+    steps:
+      - checkout
+      - hugo-build:
+          source: "<< parameters.source >>"
+          destination: "<< parameters.destination >>"
+      - when:
+          condition: << parameters.html-proofer >>
+          steps:
+            - html-proofer:
+                path: "<< parameters.source >>/<< parameters.destination >>"
+      - when:
+          condition: << parameters.persist-to-workspace >>
+          steps:
+            - persist_to_workspace:
+                root: "<< parameters.source >>"
+                paths:
+                  - "<< parameters.destination >>"
