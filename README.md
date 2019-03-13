@@ -1,4 +1,4 @@
-# Hugo Orb [![CircleCI Build Status](https://circleci.com/gh/cci-orbs/hugo.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/cci-orbs/hugo) [![CircleCI Orb Version](https://img.shields.io/badge/endpoint.svg?url=https://badges.circleci.io/orb/circleci/hugo)][reg-page]
+# Hugo Orb [![CircleCI Build Status](https://circleci.com/gh/cci-orbs/hugo.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/cci-orbs/hugo) [![CircleCI Orb Version](https://img.shields.io/badge/endpoint.svg?url=https://badges.circleci.io/orb/circleci/hugo)][reg-page] [![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/cci-orbs/hugo/master/LICENSE)
 
 A Hugo Orb for CircleCI.
 This orb allows you to build and test Hugo based statically generated websites.
