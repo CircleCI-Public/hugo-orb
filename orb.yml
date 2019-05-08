@@ -105,6 +105,13 @@ jobs:
         default: "production"
     steps:
       - checkout
+      - run:
+          name: "Checkout Submodules if Needed"
+          command: |
+            if [ -f ".gitmodules" ]; then
+              git submodule sync
+              git submodule update --init --recursive
+            fi
       - hugo-build:
           source: "<< parameters.source >>"
           destination: "<< parameters.destination >>"
