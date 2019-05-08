@@ -128,7 +128,7 @@ jobs:
                 paths:
                   - "<< parameters.destination >>"
 
-example:
+examples:
   build-and-test:
     description: |
       "The simplest example of using the Hugo orb."
