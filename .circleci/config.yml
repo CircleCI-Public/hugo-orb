@@ -23,7 +23,7 @@ workflows:
             tags:
               # Simplified SemVer regex
               only: /^\d+\.\d+\.\d+$/
-          context: main
+          context: orb-publishing
 
 jobs:
   test:
