@@ -3,7 +3,7 @@ version: 2.1
 description: "Common CircleCI tasks for Hugo."
 
 orbs:
-  detect: circleci/os-detect@0.1
+  detect: circleci/os-detect@0.1.1
 
 executors:
   cibuilds:
