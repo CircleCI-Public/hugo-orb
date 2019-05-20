@@ -18,7 +18,7 @@ Example use as well as a list of available executors, commands, and jobs are ava
 
 
 ## Contributing
-We welcome [issues](https://github.com/cci-orbs/hugo/issues) to and [pull requests](https://github.com/cci-orbs/hugo/pulls) against this repository!
+We welcome [issues](https://github.com/CircleCI-Public/hugo-orb/issues) to and [pull requests](https://github.com/CircleCI-Public/hugo-orb/pulls) against this repository!
 For further questions/comments about this or other orbs, visit the Orb Category of [CircleCI Discuss](https://discuss.circleci.com/c/orbs).
 
 ### Publishing
