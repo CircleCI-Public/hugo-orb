@@ -2,6 +2,9 @@ version: 2.1
 
 description: "Common CircleCI tasks for Hugo."
 
+orbs:
+  detect: circleci/os-detect@0.1
+
 executors:
   cibuilds:
     description: "The cibuilds/hugo Docker image."
@@ -25,11 +28,27 @@ commands:
         type: boolean
         default: true
     steps:
+      - detect/init
       - run:
           name: "Install Hugo"
           command: |
+            case $OSD_FAMILY in
+              linux)
+                OS=Linux
+                PKG_EXT=tar.gz
+                ;;
+              darwin)
+                OS=macOS
+                PKG_EXT=tar.gz
+                ;;
+              *)
+                echo "Unsupported operating system."
+                exit 1
+                ;;
+            esac
+
             # If we're in Alpine, install additional compatibility packages.
-            if [ -f /etc/alpine-release ]; then
+            if [[ $OSD_ID == "alpine" ]]; then
               apk add build-base curl libcurl libc6-compat libxml2-dev libxslt-dev
             fi
 
@@ -39,7 +58,7 @@ commands:
               HUGO_EXTENDED=""
             fi
 
-            HUGO_URL=https://github.com/gohugoio/hugo/releases/download/v<< parameters.version >>/hugo${HUGO_EXTENDED}_<< parameters.version >>_Linux-64bit.tar.gz
+            HUGO_URL=https://github.com/gohugoio/hugo/releases/download/v<< parameters.version >>/hugo${HUGO_EXTENDED}_<< parameters.version >>_${OS}-64bit.${PKG_EXT}
 
             curl -sSL "$HUGO_URL" | tar -xz -C /usr/local/bin hugo
   hugo-build:
@@ -148,7 +167,7 @@ examples:
     usage:
       version: 2.1
       orbs:
-        hugo: circleci/hugo@0.1
+        hugo: circleci/hugo@0.2
       workflows:
         main:
           jobs:
