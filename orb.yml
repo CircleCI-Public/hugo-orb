@@ -83,13 +83,178 @@ commands:
   html-proofer:
     description: "Runs HTML Proofer on 'path' to check for html errors. Ruby and the `html-proofer` gem must already be installed to use."
     parameters:
+      # Reference for all params is located below.
+      # see: https://github.com/gjtorikian/html-proofer#configuration
+      # see: https://github.com/gjtorikian/html-proofer/blob/master/spec/html-proofer/command_spec.rb
+      # see: https://github.com/gjtorikian/html-proofer/blob/master/lib/html-proofer/configuration.rb
       path:
         description: "Path to generated files relative to working_directory."
         type: string
+      allow-missing-href:
+        description: "If `true`, does not flag `a` tags missing `href` (this is the default for HTML5)."
+        type: boolean
+        default: false
+      allow-hash-href:
+        description: "If `true`, ignores the `href="#"`"
+        type: boolean
+        default: true
+      as-links:
+        description: "Assumes that `PATH` is a comma-separated array of links to check."
+        type: boolean
+        default: false
+      alt-ignore:
+        description: "A comma-separated list of Strings or RegExps containing `img`s whose missing `alt` tags are safe to ignore"
+        type: string
+        default: ''
+      assume-extension:
+        description: "Automatically add extension (e.g. `.html`) to file paths, to allow extensionless URLs (as supported by Jekyll 3 and GitHub Pages) (default: `false`)."
+        type: boolean
+        default: false
+      checks-to-ignore:
+        description: "An array of Strings indicating which checks you'd like to not perform."
+        type: string
+        default: ''
+      check-external-hash:
+        description: "Checks whether external hashes exist (even if the webpage exists). This slows the checker down (default: `false`)."
+        type: boolean
+        default: false
+      check-favicon:
+        description: "Enables the favicon checker (default: `false`)."
+        type: boolean
+        default: false
+      check-html:
+        description: "Enables HTML validation errors from Nokogiri (default: `false`)."
+        type: boolean
+        default: true
+      check-img-http:
+        description: "Fails an image if it's marked as `http` (default: `false`)."
+        type: boolean
+        default: false
+      check-opengraph:
+        description: "Enables the Open Graph checker (default: `false`)."
+        type: boolean
+        default: false
+      check-sri:
+        description: "Check that `<link>` and `<script>` external resources do use SRI (default: `false`)."
+        type: boolean
+        default: false
+      directory-index-file:
+        description: "Sets the file to look for when a link refers to a directory. (default: `index.html`)"
+        type: string
+        default: ''
+      disable-external:
+        description: "If `true`, does not run the external link checker, which can take a lot of time (default: `false`)"
+        type: boolean
+        default: true
+      empty-alt-ignore:
+        description: "If `true`, ignores images with empty alt tags"
+        type: boolean
+        default: true
+      error-sort:
+        description: "Defines the sort order for error output. Can be `:path`, `:desc`, or `:status` (default: `:path`)."
+        type: string
+        default: ''
+      enforce-https:
+        description: "Fails a link if it's not marked as `https` (default: `false`)."
+        type: boolean
+        default: false
+      extension:
+        description: "The extension of your HTML files including the dot. (default: `.html`)"
+        type: string
+        default: ''
+      external_only:
+        description: "Only checks problems with external references"
+        type: boolean
+        default: false
+      file-ignore:
+        description: "A comma-separated list of Strings or RegExps containing file paths that are safe to ignore"
+        type: string
+        default: ''
+      http-status-ignore:
+        description: "A comma-separated list of numbers representing status codes to ignore."
+        type: string
+        default: ''
+      internal-domains:
+        description: "A comma-separated list of Strings containing domains that will be treated as internal urls."
+        type: string
+        default: ''
+      report-invalid-tags:
+        description: "Ignore `check_html` errors associated with unknown markup (default: `false`)"
+        type: boolean
+        default: false
+      report-missing-names:
+        description: "Ignore `check_html` errors associated with missing entities (default: `false`)"
+        type: boolean
+        default: false
+      report-script-embeds:
+        description: "Ignore `check_html` errors associated with `script`s (default: `false`)"
+        type: boolean
+        default: false
+      log-level:
+        description: "Sets the logging level, as determined by Yell. One of `:debug`, `:info`, `:warn`, `:error`, or `:fatal`. (default: `:info`)"
+        type: string
+        default: ''
+      only-4xx:
+        description: "Only reports errors for links that fall within the 4xx status code range"
+        type: boolean
+        default: false
+      storage-dir:
+        description: "Directory where to store the cache log (default: \"tmp/.htmlproofer\")"
+        type: string
+        default: ''
+      timeframe:
+        description: "A string representing the caching timeframe."
+        type: string
+        default: ''
+      typhoeus-config:
+        description: "JSON-formatted string of Typhoeus config. Will override the html-proofer defaults."
+        type: string
+        default: ''
+      url-ignore:
+        description: "A comma-separated list of Strings or RegExps containing URLs that are safe to ignore. It affects all HTML attributes. Note that non-HTTP(S) URIs are always ignored"
+        type: string
+        default: ''
+      url-swap:
+        description: "A comma-separated list containing key-value pairs of `RegExp => String`. It transforms URLs that match `RegExp` into `String` via `gsub`. The escape sequences `:` should be used to produce literal `:`s."
+        type: string
+        default: ''
     steps:
       - run:
           name: "Test generated website with HTML Proofer."
-          command: "htmlproofer << parameters.path >> --allow-hash-href --check-html --empty-alt-ignore --disable-external"
+          command: |
+            htmlproofer << parameters.path >> \
+              <<# parameters.allow-missing-href >> --allow-missing-href <</ parameters.allow-missing-href >> \
+              <<# parameters.allow-hash-href >> --allow-hash-href <</ parameters.allow-hash-href >> \
+              <<# parameters.as-links >> --as-links <</ parameters.as-links >> \
+              --alt-ignore << parameters.alt-ignore >> \
+              <<# parameters.assume-extension >> --assume-extension <</ parameters.assume-extension >> \
+              --checks-to-ignore << parameters.checks-to-ignore >> \
+              <<# parameters.check-external-hash >> --check-external-hash <</ parameters.check-external-hash >> \
+              <<# parameters.check-favicon >> --check-favicon <</ parameters.check-favicon >> \
+              <<# parameters.check-html >> --check-html <</ parameters.check-html >> \
+              <<# parameters.check-img-http >> --check-img-http <</ parameters.check-img-http >> \
+              <<# parameters.check-opengraph >> --check-opengraph <</ parameters.check-opengraph >> \
+              <<# parameters.check-sri >> --check-sri <</ parameters.check-sri >> \
+              --directory-index-file << parameters.directory-index-file >> \
+              <<# parameters.disable-external >> --disable-external <</ parameters.disable-external >> \
+              <<# parameters.empty-alt-ignore >> --empty-alt-ignore <</ parameters.empty-alt-ignore >> \
+              --error-sort << parameters.error-sort >> \
+              <<# parameters.enforce-https >> --enforce-https <</ parameters.enforce-https >> \
+              --extension << parameters.extension >> \
+              <<# parameters.external_only >> --external_only <</ parameters.external_only >> \
+              --file-ignore << parameters.file-ignore >> \
+              --http-status-ignore << parameters.http-status-ignore >> \
+              --internal-domains << parameters.internal-domains >> \
+              <<# parameters.report-invalid-tags >> --report-invalid-tags <</ parameters.report-invalid-tags >> \
+              <<# parameters.report-missing-names >> --report-missing-names <</ parameters.report-missing-names >> \
+              <<# parameters.report-script-embeds >> --report-script-embeds <</ parameters.report-script-embeds >> \
+              --log-level << parameters.log-level >> \
+              <<# parameters.only-4xx >> --only-4xx <</ parameters.only-4xx >> \
+              --storage-dir << parameters.storage-dir >> \
+              --timeframe << parameters.timeframe >> \
+              --typhoeus-config << parameters.typhoeus-config >> \
+              --url-ignore << parameters.url-ignore >> \
+              --url-swap << parameters.url-swap >>
 
 jobs:
   build:
