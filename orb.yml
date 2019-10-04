@@ -1,6 +1,8 @@
 version: 2.1
 
-description: "Common CircleCI tasks for Hugo."
+description: |
+  Common CircleCI tasks for Hugo.
+  Source: https://github.com/CircleCI-Public/hugo-orb/
 
 orbs:
   detect: circleci/os-detect@0.1.1
