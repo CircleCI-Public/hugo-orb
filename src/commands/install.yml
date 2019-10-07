@@ -1,0 +1,43 @@
+description: "Install the Hugo binary into your build."
+parameters:
+  version:
+    description: "The Hugo version."
+    type: string
+  extended:
+    description: "Install the Hugo extended binary?"
+    type: boolean
+    default: true
+steps:
+  - detect/init
+  - run:
+      name: "Install Hugo"
+      command: |
+        case $OSD_FAMILY in
+          linux)
+            OS=Linux
+            PKG_EXT=tar.gz
+            ;;
+          darwin)
+            OS=macOS
+            PKG_EXT=tar.gz
+            ;;
+          *)
+            echo "Unsupported operating system."
+            exit 1
+            ;;
+        esac
+
+        # If we're in Alpine, install additional compatibility packages.
+        if [[ $OSD_ID == "alpine" ]]; then
+          apk add build-base curl libcurl libc6-compat libxml2-dev libxslt-dev
+        fi
+
+        if [ << parameters.extended >> = true ]; then
+          HUGO_EXTENDED="_extended"
+        else
+          HUGO_EXTENDED=""
+        fi
+
+        HUGO_URL=https://github.com/gohugoio/hugo/releases/download/v<< parameters.version >>/hugo${HUGO_EXTENDED}_<< parameters.version >>_${OS}-64bit.${PKG_EXT}
+
+        curl -sSL "$HUGO_URL" | tar -xz -C /usr/local/bin hugo

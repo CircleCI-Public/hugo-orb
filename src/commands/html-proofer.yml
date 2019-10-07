@@ -1,0 +1,9 @@
+description: "Runs HTML Proofer on 'path' to check for html errors. Ruby and the `html-proofer` gem must already be installed to use."
+parameters:
+  path:
+    description: "Path to generated files relative to working_directory."
+    type: string
+steps:
+  - run:
+      name: "Test generated website with HTML Proofer."
+      command: "htmlproofer << parameters.path >> --allow-hash-href --check-html --empty-alt-ignore --disable-external"

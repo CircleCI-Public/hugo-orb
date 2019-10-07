@@ -1,0 +1,12 @@
+description: |
+  "The simplest example of using the Hugo orb."
+usage:
+  version: 2.1
+  orbs:
+    hugo: circleci/hugo@0.1
+  workflows:
+    main:
+      jobs:
+        - hugo/build:
+            version: "0.55"
+            html-proofer: true

@@ -1,0 +1,28 @@
+description: |
+  "An example of building a Hugo site, testing with HTML Proofer, and deployng it. Here the Hugo source is in a subdirectory called 'src'. The deploy job is empty and serves as an example. Instead of the 'ls' command, you'd want to deploy the files using whatever tools you're used to."
+usage:
+  version: 2.1
+  orbs:
+    hugo: circleci/hugo@0.2
+  workflows:
+    main:
+      jobs:
+        - hugo/build:
+            version: "0.55"
+            source: "src/"
+            html-proofer: true
+        - deploy:
+            requires:
+              - hugo/build
+            filters:
+              branches:
+                only: master
+  jobs:
+    deploy:
+      docker:
+        - image: cibuilds/base
+      steps:
+        - attach_workspace:
+            at: my-site
+        # A real deploy command should be below.
+        - run: ls -lah my-site
