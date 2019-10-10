@@ -1,0 +1,22 @@
+description: "Builds with Hugo a static site located at 'source'. The default is '.'."
+parameters:
+  source:
+    description: "Path to Hugo root relative to working_directory."
+    type: string
+    default: "."
+  destination:
+    description: "Path to where Hugo outputs generated site. Relative to `source`."
+    type: string
+    default: "public"
+  hugo-env:
+    description: "Set the value of HUGO_ENV prior to running Hugo."
+    type: string
+    default: "production"
+  extra-flags:
+    description: "Additional flags to pass when running Hugo (e.g. -DF)."
+    type: string
+    default: ""
+steps:
+  - run:
+      name: "Build with Hugo"
+      command: "HUGO_ENV=<< parameters.hugo-env >> hugo -v -s << parameters.source >> -d << parameters.destination >> << parameters.extra-flags >>"

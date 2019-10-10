@@ -1,0 +1,58 @@
+description: "Build a site with Hugo."
+executor:
+  name: cibuilds
+  tag: << parameters.version >>
+parameters:
+  version:
+    description: "Hugo version to use. Defaults to latest."
+    type: string
+    default: latest
+  source:
+    description: "Path to Hugo root relative to working_directory."
+    type: string
+    default: "."
+  destination:
+    description: "Path to where Hugo outputs generated site. Relative to `source`."
+    type: string
+    default: "public"
+  html-proofer:
+    description: "Whether or not to test the outputted HTML with HTML Proofer."
+    type: boolean
+    default: true
+  persist-to-workspace:
+    description: "Whether to persist generated files to a CircleCI Workspace. This uses `parameters.source` as root and `parameters.publishdir` as the path."
+    type: boolean
+    default: true
+  hugo-env:
+    description: "Set the value of HUGO_ENV prior to running Hugo."
+    type: string
+    default: "production"
+  hugo-extra-flags:
+    description: "Additional flags to pass when running Hugo (e.g. -DF)."
+    type: string
+    default: ""
+steps:
+  - checkout
+  - run:
+      name: "Checkout Submodules if Needed"
+      command: |
+        if [ -f ".gitmodules" ]; then
+          git submodule sync
+          git submodule update --init --recursive
+        fi
+  - hugo-build:
+      source: "<< parameters.source >>"
+      destination: "<< parameters.destination >>"
+      extra-flags: "<< parameters.hugo-extra-flags >>"
+  - when:
+      condition: << parameters.html-proofer >>
+      steps:
+        - html-proofer:
+            path: "<< parameters.source >>/<< parameters.destination >>"
+  - when:
+      condition: << parameters.persist-to-workspace >>
+      steps:
+        - persist_to_workspace:
+            root: "<< parameters.source >>"
+            paths:
+              - "<< parameters.destination >>"
