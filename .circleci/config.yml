@@ -33,11 +33,11 @@ jobs:
       - cli/install
       - run:
           name: "Validate Orb config"
-          command: circleci orb validate orb.yml
+          command: circleci config pack src > orb.yml && circleci orb validate orb.yml
   publish:
     executor: cli/default
     steps:
       - checkout
       - run:
           name: "Publish orb via the CircleCI CLI"
-          command: circleci orb publish orb.yml circleci/hugo@${CIRCLE_TAG}
+          command: circleci orb pack src > orb.yml && circleci orb publish orb.yml circleci/hugo@${CIRCLE_TAG}
