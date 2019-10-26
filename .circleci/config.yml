@@ -1,12 +1,12 @@
 version: 2.1
 
 orbs:
-  cli: circleci/circleci-cli@0.1.4
+  cli: circleci/circleci-cli@0.1.5
 
 executors:
-  cibuilds:
+  base:
     docker:
-      - image: cibuilds/base:2019.03
+      - image: cimg/base:2019.10
 
 workflows:
   main:
@@ -27,10 +27,9 @@ workflows:
 
 jobs:
   test:
-    executor: cibuilds
+    executor: cli/default
     steps:
       - checkout
-      - cli/install
       - run:
           name: "Validate Orb config"
           command: circleci config pack src > orb.yml && circleci orb validate orb.yml
@@ -40,4 +39,4 @@ jobs:
       - checkout
       - run:
           name: "Publish orb via the CircleCI CLI"
-          command: circleci orb pack src > orb.yml && circleci orb publish orb.yml circleci/hugo@${CIRCLE_TAG}
+          command: circleci config pack src > orb.yml && circleci orb publish orb.yml circleci/hugo@${CIRCLE_TAG}
