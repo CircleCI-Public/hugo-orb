@@ -27,6 +27,10 @@ parameters:
     description: "Set the value of HUGO_ENV prior to running Hugo."
     type: string
     default: "production"
+  hugo-extra-flags:
+    description: "Additional flags to pass when running Hugo (e.g. -DF)."
+    type: string
+    default: ""
 steps:
   - checkout
   - run:
@@ -39,6 +43,7 @@ steps:
   - hugo-build:
       source: "<< parameters.source >>"
       destination: "<< parameters.destination >>"
+      extra-flags: "<< parameters.hugo-extra-flags >>"
   - when:
       condition: << parameters.html-proofer >>
       steps:

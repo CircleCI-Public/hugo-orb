@@ -12,7 +12,11 @@ parameters:
     description: "Set the value of HUGO_ENV prior to running Hugo."
     type: string
     default: "production"
+  extra-flags:
+    description: "Additional flags to pass when running Hugo (e.g. -DF)."
+    type: string
+    default: ""
 steps:
   - run:
       name: "Build with Hugo"
-      command: "HUGO_ENV=<< parameters.hugo-env >> hugo -v -s << parameters.source >> -d << parameters.destination >>"
+      command: "HUGO_ENV=<< parameters.hugo-env >> hugo -v -s << parameters.source >> -d << parameters.destination >> << parameters.extra-flags >>"
