@@ -3,6 +3,10 @@ version: 2.1
 description: |
   Common CircleCI tasks for installing and using Hugo.
 
+  Supports the Docker executor (Linux OS with libc) and the macOS executor.
+   Includes a `cibuilds` executor image with Hugo and html-proofer
+   pre-installed.
+
 display:
   source_url: "https://github.com/CircleCI-Public/hugo-orb/"
   home_url: "https://gohugo.io/"
