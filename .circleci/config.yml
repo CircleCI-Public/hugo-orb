@@ -1,12 +1,12 @@
 version: 2.1
 
 orbs:
-  cli: circleci/circleci-cli@0.1.5
+  cli: circleci/circleci-cli@0.1
 
 executors:
   base:
     docker:
-      - image: cimg/base:2019.10
+      - image: cimg/base:2020.05
 
 workflows:
   main:
