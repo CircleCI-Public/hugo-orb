@@ -41,7 +41,7 @@ steps:
         HUGO_URL=https://github.com/gohugoio/hugo/releases/download/v<< parameters.version >>/hugo${HUGO_EXTENDED}_<< parameters.version >>_${OS}-64bit.${PKG_EXT}
 
         # If the download fails...
-        if curl --fail -sSL "$HUGO_URL" 2>/dev/null | tar -xz -C /usr/local/bin hugo 2>/dev/null; then
+        if curl --fail -sSL "$HUGO_URL" 2>/dev/null | $SUDO tar -xz -C /usr/local/bin hugo 2>/dev/null; then
           echo "We're good, continue."
         else
           if [[ ! << parameters.version >> =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
