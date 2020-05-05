@@ -2,41 +2,87 @@ version: 2.1
 
 orbs:
   cli: circleci/circleci-cli@0.1
+  hugo: circleci/hugo@dev:alpha  # dev:alpha is used for integration tests
+  orb-tools: circleci/orb-tools@9.0
 
-executors:
-  base:
-    docker:
-      - image: cimg/base:2020.05
+parameters:
+  # These pipeline parameters are required by the
+  # "trigger-integration-tests-workflow" job, by default.
+  run-integration-tests:
+    type: boolean
+    default: false
+  dev-orb-version:
+    type: string
+    default: "dev:alpha"
 
 workflows:
-  main:
+  lint_pack-validate_publish-dev:  # runs on every commit
+    unless: << pipeline.parameters.run-integration-tests >>
     jobs:
-      - test:
-          filters:
-            tags:
-              # Simplified SemVer regex
-              only: /^\d+\.\d+\.\d+$/
-      - publish:
+      - orb-tools/lint
+      - orb-tools/pack
+      - orb-tools/publish-dev:
+          # release dev version of orb, for testing & possible publishing.
+          # orb will be published as dev:alpha and dev:${CIRCLE_SHA1:0:7}.
+          orb-name: circleci/hugo
+          requires:
+            - orb-tools/pack
+          context: orb-publishing
+      - orb-tools/trigger-integration-tests-workflow:
+          # trigger an integration workflow to test the
+          # dev:${CIRCLE_SHA1:0:7} version of your orb
+          name: trigger-integration-dev
+          requires:
+            - orb-tools/publish-dev
+          context: orb-publishing
+  integration-tests_prod-release:
+    # This `integration-tests_prod-release` workflow will only run
+    # when the run-integration-tests pipeline parameter is set to true.
+    # It is meant to be triggered by the "trigger-integration-tests-workflow"
+    # job, and run tests on <your orb>@dev:${CIRCLE_SHA1:0:7}.
+    when: << pipeline.parameters.run-integration-tests >>
+    jobs:
+      - integration-test-1
+        #- integration-test-2
+
+      # publish a semver version of the orb. relies on
+      # the commit subject containing the text "[semver:patch|minor|major|skip]"
+      # as that will determine whether a patch, minor or major
+      # version will be published or if publishing should
+      # be skipped.
+      # e.g. [semver:patch] will cause a patch version to be published.
+      - orb-tools/dev-promote-prod-from-commit-subject:
+          orb-name: circleci/hugo
+          context: orb-publishing
+          add-pr-comment: true
+          bot-token-variable: GHI_TOKEN
+          bot-user: cpe-bot
+          fail-if-semver-not-indicated: true
+          publish-version-tag: true
+          requires:
+            - integration-test-1
+            #- integration-test-2
           filters:
             branches:
-              ignore: /.*/
-            tags:
-              # Simplified SemVer regex
-              only: /^\d+\.\d+\.\d+$/
-          context: orb-publishing
+              only: master
 
 jobs:
-  test:
-    executor: cli/default
+  integration-test-1:
+    executor:
+      name: hugo/cibuilds
+      tag: "0.69"
     steps:
-      - checkout
       - run:
-          name: "Validate Orb config"
-          command: circleci config pack src > orb.yml && circleci orb validate orb.yml
-  publish:
-    executor: cli/default
+          name: "Check out Hugo Docs as a sample project."
+          command: git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
+      - hugo/hugo-build
+  integration-test-2:
+    docker:
+      - image: cimg/base:stable
     steps:
-      - checkout
       - run:
-          name: "Publish orb via the CircleCI CLI"
-          command: circleci config pack src > orb.yml && circleci orb publish orb.yml circleci/hugo@${CIRCLE_TAG}
+          name: "Check out Hugo Docs as a sample project."
+          command: git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
+      - hugo/install:
+          version: "0.69.2"
+      - hugo/hugo-build
