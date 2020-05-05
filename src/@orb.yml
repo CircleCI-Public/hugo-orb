@@ -1,8 +1,11 @@
 version: 2.1
 
 description: |
-  Common CircleCI tasks for Hugo.
-  Source: https://github.com/CircleCI-Public/hugo-orb/
+  Common CircleCI tasks for installing and using Hugo.
+
+display:
+  source_url: "https://github.com/CircleCI-Public/hugo-orb/"
+  home_url: "https://gohugo.io/"
 
 orbs:
   detect: circleci/os-detect@0.1.1
