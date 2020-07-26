@@ -30,7 +30,7 @@ parameters:
   checks-to-ignore:
     description: "An array of Strings indicating which checks you'd like to not perform."
     type: string
-    default: ''
+    default: "''"
   check-external-hash:
     description: "Checks whether external hashes exist (even if the webpage exists). This slows the checker down (default: `false`)."
     type: boolean
@@ -58,7 +58,7 @@ parameters:
   directory-index-file:
     description: "Sets the file to look for when a link refers to a directory. (default: `index.html`)"
     type: string
-    default: ''
+    default: 'index.html'
   disable-external:
     description: "If `true`, does not run the external link checker, which can take a lot of time (default: `false`)"
     type: boolean
@@ -70,7 +70,7 @@ parameters:
   error-sort:
     description: "Defines the sort order for error output. Can be `:path`, `:desc`, or `:status` (default: `:path`)."
     type: string
-    default: ''
+    default: ':path'
   enforce-https:
     description: "Fails a link if it's not marked as `https` (default: `false`)."
     type: boolean
@@ -78,7 +78,7 @@ parameters:
   extension:
     description: "The extension of your HTML files including the dot. (default: `.html`)"
     type: string
-    default: ''
+    default: "'.html'"
   external_only:
     description: "Only checks problems with external references"
     type: boolean
@@ -86,15 +86,15 @@ parameters:
   file-ignore:
     description: "A comma-separated list of Strings or RegExps containing file paths that are safe to ignore"
     type: string
-    default: ''
+    default: "''"
   http-status-ignore:
     description: "A comma-separated list of numbers representing status codes to ignore."
     type: string
-    default: ''
+    default: "''"
   internal-domains:
     description: "A comma-separated list of Strings containing domains that will be treated as internal urls."
     type: string
-    default: ''
+    default: "''"
   report-invalid-tags:
     description: "Ignore `check_html` errors associated with unknown markup (default: `false`)"
     type: boolean
@@ -107,10 +107,22 @@ parameters:
     description: "Ignore `check_html` errors associated with `script`s (default: `false`)"
     type: boolean
     default: false
+  report-missing-doctype:
+    description: "Ignore `check_html` errors associated with missing or out-of-order `DOCTYPE` (default: `false`)"
+    type: boolean
+    default: false
+  report-eof-tags:
+    description: "Ignore `check_html` errors associated with malformed tags (default: `false`)"
+    type: boolean
+    default: false
+  report-mismatched-tags:
+    description: "Ignore `check_html` errors associated with mismatched tags (default: `false`)"
+    type: boolean
+    default: false
   log-level:
     description: "Sets the logging level, as determined by Yell. One of `:debug`, `:info`, `:warn`, `:error`, or `:fatal`. (default: `:info`)"
     type: string
-    default: ''
+    default: 'info'
   only-4xx:
     description: "Only reports errors for links that fall within the 4xx status code range"
     type: boolean
@@ -118,23 +130,23 @@ parameters:
   storage-dir:
     description: "Directory where to store the cache log (default: \"tmp/.htmlproofer\")"
     type: string
-    default: ''
+    default: "'tmp/.htmlproofer'"
   timeframe:
-    description: "A string representing the caching timeframe."
+    description: "A string representing the caching timeframe. The format is `[0-9]+[mhd]` where `m` stands for month, `h` for hours and `d` for days."
     type: string
-    default: ''
+    default: "'1h'"
   typhoeus-config:
     description: "JSON-formatted string of Typhoeus config. Will override the html-proofer defaults."
     type: string
-    default: ''
+    default: "'{}'"
   url-ignore:
     description: "A comma-separated list of Strings or RegExps containing URLs that are safe to ignore. It affects all HTML attributes. Note that non-HTTP(S) URIs are always ignored"
     type: string
-    default: ''
+    default: "''"
   url-swap:
     description: "A comma-separated list containing key-value pairs of `RegExp => String`. It transforms URLs that match `RegExp` into `String` via `gsub`. The escape sequences `:` should be used to produce literal `:`s."
     type: string
-    default: ''
+    default: "''"
 steps:
   - run:
       name: "Test generated website with HTML Proofer."
@@ -165,6 +177,9 @@ steps:
           <<# parameters.report-invalid-tags >> --report-invalid-tags <</ parameters.report-invalid-tags >> \
           <<# parameters.report-missing-names >> --report-missing-names <</ parameters.report-missing-names >> \
           <<# parameters.report-script-embeds >> --report-script-embeds <</ parameters.report-script-embeds >> \
+          <<# parameters.report-missing-doctype >> --report-missing-doctype <</ parameters.report-missing-doctype >> \
+          <<# parameters.report-eof-tags >> --report-eof-tags <</ parameters.report-eof-tags >> \
+          <<# parameters.report-mismatched-tags >> --report-mismatched-tags <</ parameters.report-mismatched-tags >> \
           --log-level << parameters.log-level >> \
           <<# parameters.only-4xx >> --only-4xx <</ parameters.only-4xx >> \
           --storage-dir << parameters.storage-dir >> \
