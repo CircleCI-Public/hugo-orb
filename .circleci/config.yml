@@ -76,7 +76,9 @@ jobs:
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
-          command: git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
+          command: |
+            git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
+            rm ~/project/content/en/content-management/related.md
       - hugo/hugo-build
       - run:
           name: "Basic Test"
@@ -87,7 +89,9 @@ jobs:
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
-          command: git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
+          command: |
+            git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
+            rm ~/project/content/en/content-management/related.md
       - hugo/install:
           version: "0.69.2"
       - hugo/hugo-build
@@ -100,7 +104,9 @@ jobs:
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
-          command: git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
+          command: |
+            git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
+            rm ~/project/content/en/content-management/related.md
       - hugo/install:
           version: "0.69.2"
       - hugo/hugo-build
