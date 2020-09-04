@@ -71,7 +71,7 @@ workflows:
 jobs:
   integration-test-1:
     executor:
-      name: hugo/cibuilds
+      name: hugo/default
       tag: "0.69"
     steps:
       - run:
