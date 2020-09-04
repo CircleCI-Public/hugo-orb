@@ -41,7 +41,7 @@ steps:
         fi
 
         if [ -f "hugo-archive" ]; then
-          $SUDO tar -xz -C << parameters.install-location >> hugo 2>/dev/null
+          $SUDO tar -xz -C << parameters.install-location >> hugo-archive 2>/dev/null
           echo "Installed hugo version <<parameters.version>> from cache."
           exit 0
         fi
