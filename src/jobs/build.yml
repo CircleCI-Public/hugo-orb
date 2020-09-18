@@ -1,6 +1,6 @@
 description: "Build a site with Hugo."
 executor:
-  name: cibuilds
+  name: default
   tag: << parameters.version >>
 parameters:
   version:

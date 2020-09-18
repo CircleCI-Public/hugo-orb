@@ -71,8 +71,8 @@ workflows:
 jobs:
   integration-test-1:
     executor:
-      name: hugo/cibuilds
-      tag: "0.69"
+      name: hugo/default
+      tag: "0.74.3"
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
@@ -93,7 +93,7 @@ jobs:
             git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm ~/project/content/en/content-management/related.md
       - hugo/install:
-          version: "0.69.2"
+          version: "0.74.3"
       - hugo/hugo-build
       - run:
           name: "Basic Test"
@@ -108,7 +108,7 @@ jobs:
             git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm ~/project/content/en/content-management/related.md
       - hugo/install:
-          version: "0.69.2"
+          version: "0.74.3"
       - hugo/hugo-build
       - run:
           name: "Basic Test"

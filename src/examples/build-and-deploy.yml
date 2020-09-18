@@ -20,7 +20,7 @@ usage:
   jobs:
     deploy:
       docker:
-        - image: cibuilds/base
+        - image: cimg/base
       steps:
         - attach_workspace:
             at: my-site
