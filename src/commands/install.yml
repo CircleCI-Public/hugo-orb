@@ -14,9 +14,6 @@ parameters:
 
 steps:
   - detect/init
-  - restore_cache:
-      keys:
-        - hugo-{{ arch }}--<< parameters.version >>
   - run:
       name: "Install Hugo"
       command: |
@@ -40,12 +37,6 @@ steps:
           apk add build-base curl libcurl libc6-compat libxml2-dev libxslt-dev
         fi
 
-        if [ -f "hugo-archive" ]; then
-          $SUDO tar -xzf hugo-archive -C << parameters.install-location >> hugo 2>/dev/null
-          echo "Installed hugo version <<parameters.version>> from cache."
-          exit 0
-        fi
-
         if [ << parameters.extended >> = true ]; then
           HUGO_EXTENDED="_extended"
         else
@@ -67,7 +58,3 @@ steps:
 
           exit 1
         fi
-  - save_cache:
-      key: hugo-{{ arch }}--<< parameters.version >>
-      paths:
-        - hugo-archive
