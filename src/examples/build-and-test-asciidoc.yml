@@ -1,0 +1,12 @@
+description: "Build a Hugo site with support for the AsciiDoc markup syntax."
+usage:
+  version: 2.1
+  orbs:
+    hugo: circleci/hugo@0.2
+  workflows:
+    main:
+      jobs:
+        - hugo/build:
+            version: "0.80.0"
+            asciidoc: true
+            html-proofer: true
