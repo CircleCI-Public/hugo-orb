@@ -72,7 +72,7 @@ jobs:
   integration-test-1:
     executor:
       name: hugo/default
-      tag: "0.74.3"
+      tag: "0.78.0"
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
@@ -93,7 +93,7 @@ jobs:
             git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm ~/project/content/en/content-management/related.md
       - hugo/install:
-          version: "0.74.3"
+          version: "0.78.0"
       - hugo/hugo-build
       - run:
           name: "Basic Test"
@@ -108,7 +108,7 @@ jobs:
             git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm ~/project/content/en/content-management/related.md
       - hugo/install:
-          version: "0.74.3"
+          version: "0.78.0"
       - hugo/hugo-build
       - run:
           name: "Basic Test"
