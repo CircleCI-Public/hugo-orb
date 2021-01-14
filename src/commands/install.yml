@@ -7,10 +7,6 @@ parameters:
     description: "Install the Hugo extended binary?"
     type: boolean
     default: true
-  asciidoc:
-    description: "Include support for AsciiDoc markup language?"
-    type: boolean
-    default: false
   install-location:
     description: "Location where the hugo binary should be installed."
     type: string
@@ -39,9 +35,6 @@ steps:
         # If we're in Alpine, install additional compatibility packages.
         if [[ $OSD_ID == "alpine" ]]; then
           apk add build-base curl libcurl libc6-compat libxml2-dev libxslt-dev
-          if [ << parameters.asciidoc >> = true ]; then
-            apk add asciidoc
-          fi
         fi
 
         if [ << parameters.extended >> = true ]; then

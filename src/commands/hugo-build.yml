@@ -16,7 +16,23 @@ parameters:
     description: "Additional flags to pass when running Hugo (e.g. -DF)."
     type: string
     default: ""
+  asciidoc:
+    description: "Include support for AsciiDoc markup language?"
+    type: boolean
+    default: false
 steps:
+  - run:
+      name: "Install AsciiDoc (if enabled)"
+      command: |
+        if [ << parameters.asciidoc >> = true ]; then
+          if [ ! -x /bin/apk ]; then
+            echo "Unsupported package manager. Need apk."
+            exit 1
+          else
+            apk add asciidoc
+          fi
+        fi
+
   - run:
       name: "Build with Hugo"
       command: "HUGO_ENV=<< parameters.hugo-env >> hugo -v -s << parameters.source >> -d << parameters.destination >> << parameters.extra-flags >>"
