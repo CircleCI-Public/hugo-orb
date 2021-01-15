@@ -79,7 +79,10 @@ jobs:
           command: |
             git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm ~/project/content/en/content-management/related.md
-      - hugo/hugo-build
+      - hugo/hugo-build:
+          asciidoc: true
+          htmlproofer-http-status-ignore: "'0,400,503,999'"
+          htmlproofer-timeframe: "'1y'"
       - run:
           name: "Basic Test"
           command: hugo version
@@ -96,6 +99,8 @@ jobs:
           version: "0.78.0"
       - hugo/hugo-build:
           asciidoc: true
+          htmlproofer-http-status-ignore: "'0,400,503,999'"
+          htmlproofer-timeframe: "'1y'"
       - run:
           name: "Basic Test"
           command: hugo version
