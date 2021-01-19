@@ -35,6 +35,18 @@ parameters:
     description: "Additional flags to pass when running Hugo (e.g. -DF)."
     type: string
     default: ""
+  htmlproofer-http-status-ignore:
+    description: "An array of numbers representing status codes to ignore."
+    type: string
+    default: "''"
+  htmlproofer-url-ignore:
+    description: "An array of Strings or RegExps containing URLs that are safe to ignore. It affects all HTML attributes. Note that non-HTTP(S) URIs are always ignored."
+    type: string
+    default: "''"
+  htmlproofer-timeframe:
+    description: "A string representing the caching timeframe. The format is `[0-9]+[mhd]` where `m` stands for month, `h` for hours and `d` for days."
+    type: string
+    default: "'1h'"
 steps:
   - checkout
   - run:
@@ -54,6 +66,9 @@ steps:
       steps:
         - html-proofer:
             path: "<< parameters.source >>/<< parameters.destination >>"
+            http-status-ignore: "<< parameters.htmlproofer-http-status-ignore >>"
+            timeframe: "<< parameters.htmlproofer-timeframe >>"
+            url-ignore: "<< parameters.htmlproofer-url-ignore >>"
   - when:
       condition: << parameters.persist-to-workspace >>
       steps:
