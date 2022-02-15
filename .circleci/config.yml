@@ -93,9 +93,8 @@ jobs:
             git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm ~/project/content/en/content-management/related.md
       - hugo/install:
-          version: "0.78.0"
-      - hugo/hugo-build:
-          asciidoc: true
+          version: "0.89.0"
+      - hugo/hugo-build
       - run:
           name: "Basic Test"
           command: hugo version

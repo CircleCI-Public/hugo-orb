@@ -16,25 +16,7 @@ parameters:
     description: "Additional flags to pass when running Hugo (e.g. -DF)."
     type: string
     default: ""
-  asciidoc:
-    description: "Include support for AsciiDoc markup language?"
-    type: boolean
-    default: false
 steps:
-  - run:
-      name: "Install AsciiDoc (if enabled)"
-      command: |
-        if [ << parameters.asciidoc >> = true ]; then
-          if [[ $(grep ID_LIKE /etc/os-release) != "ID_LIKE=debian" ]]; then
-            echo "Unsupported Linux distribution. Need a Debian derivative (e.g. Ubuntu)."
-            exit 1
-          else
-            if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
-            $SUDO apt-get update --yes
-            $SUDO apt-get install --yes asciidoctor
-          fi
-        fi
-
   - run:
       name: "Build with Hugo"
       command: "HUGO_ENV=<< parameters.hugo-env >> hugo -v -s << parameters.source >> -d << parameters.destination >> << parameters.extra-flags >>"

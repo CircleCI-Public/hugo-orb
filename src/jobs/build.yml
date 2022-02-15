@@ -3,10 +3,6 @@ executor:
   name: default
   tag: << parameters.version >>
 parameters:
-  asciidoc:
-    description: "Include support for AsciiDoc markup language?"
-    type: boolean
-    default: false
   version:
     description: "Hugo version to use. Defaults to latest."
     type: string
@@ -57,7 +53,6 @@ steps:
           git submodule update --init --recursive
         fi
   - hugo-build:
-      asciidoc: "<< parameters.asciidoc >>"
       source: "<< parameters.source >>"
       destination: "<< parameters.destination >>"
       extra-flags: "<< parameters.hugo-extra-flags >>"
