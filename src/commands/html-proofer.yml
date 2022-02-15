@@ -68,9 +68,9 @@ parameters:
     type: boolean
     default: true
   error-sort:
-    description: "Defines the sort order for error output. Can be `:path`, `:desc`, or `:status` (default: `:path`)."
+    description: "Defines the sort order for error output. Can be `:path`, `:desc`, or `:status`."
     type: string
-    default: ':path'
+    default: "''"
   enforce-https:
     description: "Fails a link if it's not marked as `https` (default: `false`)."
     type: boolean
@@ -167,7 +167,7 @@ steps:
           --directory-index-file << parameters.directory-index-file >> \
           <<# parameters.disable-external >> --disable-external <</ parameters.disable-external >> \
           <<# parameters.empty-alt-ignore >> --empty-alt-ignore <</ parameters.empty-alt-ignore >> \
-          --error-sort << parameters.error-sort >> \
+          <<# parameters.error-sort >>--error-sort << parameters.error-sort >> <</ parameters.error-sort >> \
           <<# parameters.enforce-https >> --enforce-https <</ parameters.enforce-https >> \
           --extension << parameters.extension >> \
           <<# parameters.external_only >> --external_only <</ parameters.external_only >> \
