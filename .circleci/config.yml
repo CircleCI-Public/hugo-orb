@@ -72,7 +72,7 @@ jobs:
   integration-test-1:
     executor:
       name: hugo/default
-      tag: "0.78.0"
+      tag: "0.92.2"
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
@@ -85,7 +85,7 @@ jobs:
           command: hugo version
   integration-test-2:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/base:current
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
@@ -93,7 +93,7 @@ jobs:
             git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm ~/project/content/en/content-management/related.md
       - hugo/install:
-          version: "0.89.0"
+          version: "0.92.2"
       - hugo/hugo-build
       - run:
           name: "Basic Test"
@@ -108,7 +108,7 @@ jobs:
             git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm ~/project/content/en/content-management/related.md
       - hugo/install:
-          version: "0.78.0"
+          version: "0.92.2"
       - hugo/hugo-build
       - run:
           name: "Basic Test"
