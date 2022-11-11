@@ -19,4 +19,11 @@ parameters:
 steps:
   - run:
       name: "Build with Hugo"
-      command: "HUGO_ENV=<< parameters.hugo-env >> hugo -v -s << parameters.source >> -d << parameters.destination >> << parameters.extra-flags >>"
+      environment:
+        ORB_EVAL_SOURCE: < <parameters.source >>
+        ORB_EVAL_DESTINATION: << parameters.destination >>
+        ORB_EVAL_HUGO_ENV: << parameters.hugo-env >>
+        ORB_EVAL_HUGO_EXTRA_FLAGS: << parameters.extra-flags >>
+      command: << include(scripts/hugo-build.sh) >>
+
+      #HUGO_ENV=<< parameters.hugo-env >> hugo -v -s << parameters.source >> -d << parameters.destination >> << parameters.extra-flags >>"
