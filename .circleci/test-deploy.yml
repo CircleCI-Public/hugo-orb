@@ -6,10 +6,10 @@ filters: &filters
   tags:
     only: /.*/
 jobs:
-  integration-test-1:
+  integration-test-hugo:
     executor:
       name: hugo/default
-      tag: "0.92.2"
+      tag: "0.105.0 "
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
@@ -20,7 +20,7 @@ jobs:
       - run:
           name: "Basic Test"
           command: hugo version
-  integration-test-2:
+  integration-test-base:
     docker:
       - image: cimg/base:current
     steps:
@@ -30,14 +30,14 @@ jobs:
             git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm ~/project/content/en/content-management/related.md
       - hugo/install:
-          version: "0.92.2"
+          version: "0.105.0"
       - hugo/hugo-build
       - run:
           name: "Basic Test"
           command: hugo version
-  integration-test-3:
+  integration-test-macos:
     macos:
-      xcode: 11.4.1
+      xcode: 14.1.0
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
@@ -45,7 +45,7 @@ jobs:
             git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm ~/project/content/en/content-management/related.md
       - hugo/install:
-          version: "0.92.2"
+          version: "0.105.0"
       - hugo/hugo-build
       - run:
           name: "Basic Test"
@@ -54,11 +54,11 @@ workflows:
   test-deploy:
     jobs:
       # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
-      - integration-test-1:
+      - integration-test-hugo:
           filters: *filters
-      - integration-test-2:
+      - integration-test-base:
           filters: *filters
-      - integration-test-3:
+      - integration-test-macos:
           filters: *filters
       - orb-tools/pack:
           filters: *filters
@@ -68,9 +68,9 @@ workflows:
           pub-type: production
           requires:
             - orb-tools/pack
-            - integration-test-1
-            - integration-test-2
-            - integration-test-3
+            - integration-test-hugo
+            - integration-test-base
+            - integration-test-macos
           context: orb-publisher
           filters:
             branches:
