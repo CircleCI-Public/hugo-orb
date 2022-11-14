@@ -32,8 +32,8 @@ HUGO_URL=https://github.com/gohugoio/hugo/releases/download/v${ORB_VAL_VERSION}/
 curl --fail -sSL "$HUGO_URL" -o hugo-archive 2>/dev/null
 # If the download fails...
 
-if $SUDO tar -xz -f hugo-archive -C "${ORB_EVAL_INSTALL_LOCATION}" hugo 2>/dev/null; then
-    echo "We're good, continue."
+if $SUDO tar -xzf hugo-archive -C "${ORB_EVAL_INSTALL_LOCATION}" hugo 2>/dev/null; then
+    echo "Hugo succesfully installed."
 else
     if [[ ! "${ORB_VAL_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
     echo "Failed to install. The version number ${ORB_VAL_VERSION} is not a full valid SemVer version."
@@ -44,3 +44,5 @@ else
 
     exit 1
 fi
+
+https://github.com/gohugoio/hugo/releases/download/v0.105.0/hugo_extended_0.105.0_Linux-64bit.tar.gz
