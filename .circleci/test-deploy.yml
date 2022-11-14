@@ -9,7 +9,7 @@ jobs:
   integration-test-hugo:
     executor:
       name: hugo/default
-      tag: "0.105.0 "
+      tag: "0.105.0"
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
