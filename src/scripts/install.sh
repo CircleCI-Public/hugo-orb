@@ -32,7 +32,7 @@ HUGO_URL=https://github.com/gohugoio/hugo/releases/download/v${ORB_VAL_VERSION}/
 curl --fail -sSL "$HUGO_URL" -o hugo-archive 2>/dev/null
 # If the download fails...
 
-if grep < hugo-archive | $SUDO tar -xz -C "${ORB_EVAL_INSTALL_LOCATION}" hugo 2>/dev/null; then
+if $SUDO tar -xz -C "${ORB_EVAL_INSTALL_LOCATION}" < hugo-archive hugo 2>/dev/null; then
     echo "We're good, continue."
 else
     if [[ ! "${ORB_VAL_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
