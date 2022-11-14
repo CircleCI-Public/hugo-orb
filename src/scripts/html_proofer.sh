@@ -54,6 +54,7 @@ if [ "$ORB_VAL_ERRORT_SORT" = 1 ]; then
     flags+=(--error-sort "$ORB_VAL_ERRORT_SORT")
 fi
 
+set -x
 htmlproofer "$PATH_TO_FILES" \
     --alt-ignore "$ALT_IGNORE" \
     --checks-to-ignore "$CHECKS_TO_IGNORE" \
@@ -69,4 +70,4 @@ htmlproofer "$PATH_TO_FILES" \
     --url-ignore "$URL_IGNORE" \
     --url-swap "$URL_SWAP" \
     "${flags[@]}"
-
+set -x

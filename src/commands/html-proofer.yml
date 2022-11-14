@@ -152,8 +152,8 @@ steps:
       name: "Test generated website with HTML Proofer."
       environment:
           ORB_EVAL_PATH: << parameters.path >>
-          ORB_EVAL_ALT_IGNORE: << parameters.alt-ignore >> 
-          ORB_EVAL_CHECKS_TO_IGNORE: << parameters.checks-to-ignore >> 
+          ORB_EVAL_ALT_IGNORE: << parameters.alt-ignore >>
+          ORB_EVAL_CHECKS_TO_IGNORE: << parameters.checks-to-ignore >>
           ORB_EVAL_EXTENSION: << parameters.extension >>
           ORB_EVAL_FILE_IGNORE: << parameters.file-ignore >>
           ORB_EVAL_HTTPS_STATUS: << parameters.http-status-ignore >>

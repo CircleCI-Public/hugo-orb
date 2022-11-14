@@ -25,4 +25,3 @@ steps:
         ORB_EVAL_HUGO_ENV: << parameters.hugo-env >>
         ORB_EVAL_HUGO_EXTRA_FLAGS: << parameters.extra-flags >>
       command: << include(scripts/hugo-build.sh) >>
-
