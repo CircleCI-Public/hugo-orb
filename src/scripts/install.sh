@@ -44,5 +44,3 @@ else
 
     exit 1
 fi
-
-https://github.com/gohugoio/hugo/releases/download/v0.105.0/hugo_extended_0.105.0_Linux-64bit.tar.gz
