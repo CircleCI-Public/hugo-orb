@@ -28,7 +28,7 @@ else
 fi
 set -x
 
-HUGO_URL=https://github.com/gohugoio/hugo/releases/download/${ORB_VAL_VERSION}/hugo${HUGO_EXTENDED}_${ORB_VAL_VERSION}_${OS}-64bit.${PKG_EXT}
+HUGO_URL=https://github.com/gohugoio/hugo/releases/download/v${ORB_VAL_VERSION}/hugo${HUGO_EXTENDED}_${ORB_VAL_VERSION}_${OS}-64bit.${PKG_EXT}
 curl --fail -sSL "$HUGO_URL" -o hugo-archive 2>/dev/null
 # If the download fails...
 
