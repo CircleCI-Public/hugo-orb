@@ -3,7 +3,7 @@ ORB_EVAL_INSTALL_LOCATION=$(eval echo "${ORB_EVAL_INSTALL_LOCATION}")
 
 case $OSD_FAMILY in
     linux)
-    OS=Linux
+    OS=Linux-64bit
     PKG_EXT=tar.gz
     ;;
     darwin)
@@ -28,7 +28,7 @@ else
 fi
 set -x
 
-HUGO_URL=https://github.com/gohugoio/hugo/releases/download/v${ORB_VAL_VERSION}/hugo${HUGO_EXTENDED}_${ORB_VAL_VERSION}_${OS}-64bit.${PKG_EXT}
+HUGO_URL=https://github.com/gohugoio/hugo/releases/download/v${ORB_VAL_VERSION}/hugo${HUGO_EXTENDED}_${ORB_VAL_VERSION}_${OS}.${PKG_EXT}
 curl --fail -sSL "$HUGO_URL" -o hugo-archive 2>/dev/null
 # If the download fails...
 
