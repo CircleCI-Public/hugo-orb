@@ -7,7 +7,7 @@ case $OSD_FAMILY in
     PKG_EXT=tar.gz
     ;;
     darwin)
-    OS=macOS
+    OS=darwin-universal
     PKG_EXT=tar.gz
     ;;
     *)
