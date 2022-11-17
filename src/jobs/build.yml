@@ -47,11 +47,7 @@ steps:
   - checkout
   - run:
       name: "Checkout Submodules if Needed"
-      command: |
-        if [ -f ".gitmodules" ]; then
-          git submodule sync
-          git submodule update --init --recursive
-        fi
+      command: << include(scripts/submodules.sh) >>
   - hugo-build:
       source: "<< parameters.source >>"
       destination: "<< parameters.destination >>"
