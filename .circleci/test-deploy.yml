@@ -1,0 +1,79 @@
+version: 2.1
+orbs:
+  hugo: circleci/hugo@dev:<<pipeline.git.revision>>
+  orb-tools: circleci/orb-tools@11.5
+filters: &filters
+  tags:
+    only: /.*/
+jobs:
+  integration-test-hugo:
+    executor:
+      name: hugo/default
+      tag: "0.105.0"
+    steps:
+      - run:
+          name: "Check out Hugo Docs as a sample project."
+          command: |
+            git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
+            rm ~/project/content/en/content-management/related.md
+      - hugo/hugo-build
+      - run:
+          name: "Basic Test"
+          command: hugo version
+  integration-test-base:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - run:
+          name: "Check out Hugo Docs as a sample project."
+          command: |
+            git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
+            rm ~/project/content/en/content-management/related.md
+      - hugo/install:
+          version: "0.105.0"
+      - hugo/hugo-build
+      - run:
+          name: "Basic Test"
+          command: hugo version
+  integration-test-macos:
+    macos:
+      xcode: 14.1.0
+    steps:
+      - run:
+          name: "Check out Hugo Docs as a sample project."
+          command: |
+            git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
+            rm ~/project/content/en/content-management/related.md
+      - hugo/install:
+          version: "0.105.0"
+      - hugo/hugo-build
+      - run:
+          name: "Basic Test"
+          command: hugo version
+workflows:
+  test-deploy:
+    jobs:
+      # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
+      - integration-test-hugo:
+          filters: *filters
+      - integration-test-base:
+          filters: *filters
+      - integration-test-macos:
+          filters: *filters
+      - orb-tools/pack:
+          filters: *filters
+      - orb-tools/publish:
+          orb-name: circleci/hugo
+          vcs-type: << pipeline.project.type >>
+          pub-type: production
+          requires:
+            - orb-tools/pack
+            - integration-test-hugo
+            - integration-test-base
+            - integration-test-macos
+          context: orb-publisher
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+$/

@@ -70,7 +70,7 @@ parameters:
   error-sort:
     description: "Defines the sort order for error output. Can be `:path`, `:desc`, or `:status`."
     type: string
-    default: "''"
+    default: ""
   enforce-https:
     description: "Fails a link if it's not marked as `https` (default: `false`)."
     type: boolean
@@ -150,40 +150,41 @@ parameters:
 steps:
   - run:
       name: "Test generated website with HTML Proofer."
-      command: |
-        htmlproofer << parameters.path >> \
-          <<# parameters.allow-missing-href >> --allow-missing-href <</ parameters.allow-missing-href >> \
-          <<# parameters.allow-hash-href >> --allow-hash-href <</ parameters.allow-hash-href >> \
-          <<# parameters.as-links >> --as-links <</ parameters.as-links >> \
-          --alt-ignore << parameters.alt-ignore >> \
-          <<# parameters.assume-extension >> --assume-extension <</ parameters.assume-extension >> \
-          --checks-to-ignore << parameters.checks-to-ignore >> \
-          <<# parameters.check-external-hash >> --check-external-hash <</ parameters.check-external-hash >> \
-          <<# parameters.check-favicon >> --check-favicon <</ parameters.check-favicon >> \
-          <<# parameters.check-html >> --check-html <</ parameters.check-html >> \
-          <<# parameters.check-img-http >> --check-img-http <</ parameters.check-img-http >> \
-          <<# parameters.check-opengraph >> --check-opengraph <</ parameters.check-opengraph >> \
-          <<# parameters.check-sri >> --check-sri <</ parameters.check-sri >> \
-          --directory-index-file << parameters.directory-index-file >> \
-          <<# parameters.disable-external >> --disable-external <</ parameters.disable-external >> \
-          <<# parameters.empty-alt-ignore >> --empty-alt-ignore <</ parameters.empty-alt-ignore >> \
-          <<# parameters.error-sort >>--error-sort << parameters.error-sort >> <</ parameters.error-sort >> \
-          <<# parameters.enforce-https >> --enforce-https <</ parameters.enforce-https >> \
-          --extension << parameters.extension >> \
-          <<# parameters.external_only >> --external_only <</ parameters.external_only >> \
-          --file-ignore << parameters.file-ignore >> \
-          --http-status-ignore << parameters.http-status-ignore >> \
-          --internal-domains << parameters.internal-domains >> \
-          <<# parameters.report-invalid-tags >> --report-invalid-tags <</ parameters.report-invalid-tags >> \
-          <<# parameters.report-missing-names >> --report-missing-names <</ parameters.report-missing-names >> \
-          <<# parameters.report-script-embeds >> --report-script-embeds <</ parameters.report-script-embeds >> \
-          <<# parameters.report-missing-doctype >> --report-missing-doctype <</ parameters.report-missing-doctype >> \
-          <<# parameters.report-eof-tags >> --report-eof-tags <</ parameters.report-eof-tags >> \
-          <<# parameters.report-mismatched-tags >> --report-mismatched-tags <</ parameters.report-mismatched-tags >> \
-          --log-level << parameters.log-level >> \
-          <<# parameters.only-4xx >> --only-4xx <</ parameters.only-4xx >> \
-          --storage-dir << parameters.storage-dir >> \
-          --timeframe << parameters.timeframe >> \
-          --typhoeus-config << parameters.typhoeus-config >> \
-          --url-ignore << parameters.url-ignore >> \
-          --url-swap << parameters.url-swap >>
+      environment:
+          ORB_EVAL_PATH: << parameters.path >>
+          ORB_EVAL_ALT_IGNORE: << parameters.alt-ignore >>
+          ORB_EVAL_CHECKS_TO_IGNORE: << parameters.checks-to-ignore >>
+          ORB_EVAL_EXTENSION: << parameters.extension >>
+          ORB_EVAL_FILE_IGNORE: << parameters.file-ignore >>
+          ORB_EVAL_HTTPS_STATUS: << parameters.http-status-ignore >>
+          ORB_EVAL_INTERNAL_DOMAINS: << parameters.internal-domains >>
+          ORB_EVAL_DIRECTORY_INDEX_FILE: << parameters.directory-index-file >>
+          ORB_EVAL_STORAGE_DIR: << parameters.storage-dir >>
+          ORB_EVAL_URL_IGNORE: << parameters.url-ignore >>
+          ORB_EVAL_URL_SWAP: << parameters.url-swap >>
+          ORB_VAL_MISSING_HREF: << parameters.allow-missing-href >>
+          ORB_VAL_HASH_HREF: << parameters.allow-hash-href >>
+          ORB_VAL_AS_LINKS: << parameters.as-links >>
+          ORB_VAL_ASSUME_EXTENSION: << parameters.assume-extension >>
+          ORB_VAL_EXTERNAL_HASH: << parameters.check-external-hash >>
+          ORB_VAL_CHECK_FAVICON: << parameters.check-favicon >>
+          ORB_VAL_CHECK_HTML: << parameters.check-html >>
+          ORB_VAL_CHECK_IMG_HTTP: << parameters.check-img-http >>
+          ORB_VAL_CHECK_OPENGRAPH: << parameters.check-opengraph >>
+          ORB_VAL_CHECK_SRI: << parameters.check-sri >>
+          ORB_VAL_DISABLE_EXTERNAL: << parameters.disable-external >>
+          ORB_VAL_EMPTY_ALT_IGNORE: << parameters.empty-alt-ignore >>
+          ORB_VAL_ERROR_SORT: << parameters.error-sort >>
+          ORB_VAL_ENFORCE_HTTPS: << parameters.enforce-https >>
+          ORB_VAL_EXTERNAL_ONLY: << parameters.external_only >>
+          ORB_VAL_INVALID_TAGS: << parameters.report-invalid-tags >>
+          ORB_VAL_MISSING_NAMES: << parameters.report-missing-names >>
+          ORB_VAL_SCRIPT_EMBEDS: << parameters.report-script-embeds >>
+          ORB_VAL_MISSING_DOCTYPE: << parameters.report-missing-doctype >>
+          ORB_VAL_EOF_TAGS: << parameters.report-eof-tags >>
+          ORB_VAL_MISMATCHED_TAGS: << parameters.report-mismatched-tags >>
+          ORB_VAL_LOG_LEVEL: << parameters.log-level >>
+          ORB_VAL_ONLY_FOURXX: << parameters.only-4xx >>
+          ORB_VAL_TIMEFRAME: << parameters.timeframe >>
+          ORB_VAL_TYPHOEUS_CFG: << parameters.typhoeus-config >>
+      command: << include(scripts/html_proofer.sh) >>
