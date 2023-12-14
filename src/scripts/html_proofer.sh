@@ -45,7 +45,7 @@ for (( i = 0; i < ${#check_flags[@]} / 2; i++ )); do
     if [ "$flag_enabled" = 1 ]; then
         # add the flag to the array 
         arg_index=$((real_index + 1))
-        flags+=("${check_flags[$arg_index]}")
+        flags+=("${check_flags[$arg_index]} true")
     fi
 done
 
