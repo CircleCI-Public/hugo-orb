@@ -15,11 +15,14 @@ jobs:
     steps:
       - checkout
       - run: echo "this is the build job"
+      - run: set
+      
 
 workflows:
   lint-pack:
     jobs:
       - build
+        context: orb-publisher
       - orb-tools/lint:
           filters: *filters
       - orb-tools/pack:
