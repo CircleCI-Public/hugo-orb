@@ -18,12 +18,10 @@ jobs:
       - run: set
 
 workflows:
-  test:
+  lint-pack:
     jobs:
       - build:
           context: orb-publisher
-  lint-pack:
-    jobs:
       - orb-tools/lint:
           filters: *filters
       - orb-tools/pack:
