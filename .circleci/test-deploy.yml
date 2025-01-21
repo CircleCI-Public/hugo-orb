@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   hugo: circleci/hugo@dev:<<pipeline.git.revision>>
-  orb-tools: circleci/orb-tools@11.5
+  orb-tools: circleci/orb-tools@12.3.0
 filters: &filters
   tags:
     only: /.*/
