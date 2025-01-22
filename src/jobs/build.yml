@@ -1,7 +1,7 @@
 description: "Build a site with Hugo."
 executor:
   name: default
-  tag: << parameters.version >>
+  hugo_version: << parameters.version >>
 parameters:
   version:
     description: "Hugo version to use. Defaults to latest."
