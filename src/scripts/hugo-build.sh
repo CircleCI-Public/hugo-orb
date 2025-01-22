@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -x
 ORB_EVAL_SOURCE=$(eval echo "${ORB_EVAL_SOURCE}")
 ORB_EVAL_DESTINATION=$(eval echo "${ORB_EVAL_DESTINATION}")
 ORB_EVAL_HUGO_ENV=$(eval echo "${ORB_EVAL_HUGO_ENV}")
