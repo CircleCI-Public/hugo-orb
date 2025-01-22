@@ -10,4 +10,4 @@ parameters:
     default: "latest"
 docker:
   - image: cimg/go:<< parameters.go_version >>
-    command: go install github.com/gohugoio/hugo@<< parameters.hugo_version >>
+    entrypoint: go install github.com/gohugoio/hugo@<< parameters.hugo_version >>
