@@ -5,4 +5,4 @@ parameters:
     type: string
     default: "0.142.0"
 docker:
-  - image: cibuilds/go:<< parameters.hugo_version >>
+  - image: cibuilds/hugo:<< parameters.hugo_version >>
