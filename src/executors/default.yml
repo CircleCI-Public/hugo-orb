@@ -3,6 +3,6 @@ parameters:
   hugo_version:
     description: "Specifies the hugo version to install"
     type: string
-    default: "latest"
+    default: "0.142.0"
 docker:
-  - image: chainguard/hugo:<< parameters.hugo_version >>
+  - image: cibuilds/go:<< parameters.hugo_version >>
