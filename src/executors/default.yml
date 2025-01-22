@@ -1,13 +1,8 @@
 description: "The cibuilds/hugo Docker image."
 parameters:
-  go_version:
-    description: "The `cimg/go` Docker image version tag."
-    type: string
-    default: "1.23.5"
   hugo_version:
     description: "Specifies the hugo version to install"
     type: string
     default: "latest"
 docker:
-  - image: cimg/go:<< parameters.go_version >>
-    command: go install github.com/gohugoio/hugo@<< parameters.hugo_version >>
+  - image: chainguard/hugo:<< parameters.hugo_version >>
