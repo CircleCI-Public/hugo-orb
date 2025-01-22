@@ -9,5 +9,5 @@ parameters:
     type: string
     default: "latest"
 docker:
-  - image: cimg/go:<< parameters.tag >>
+  - image: cimg/go:<< parameters.go_version >>
     command: go install github.com/gohugoio/hugo@<< parameters.hugo_version >>
