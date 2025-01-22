@@ -1,10 +1,18 @@
 version: 2.1
 orbs:
-  hugo: circleci/hugo@dev:<<pipeline.git.revision>>
+  hugo: {}
   orb-tools: circleci/orb-tools@12.3.0
+
 filters: &filters
   tags:
     only: /.*/
+
+release-filters: &release-filters
+  branches:
+    ignore: /.*/
+  tags:
+    only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
+
 jobs:
   integration-test-hugo:
     executor:
