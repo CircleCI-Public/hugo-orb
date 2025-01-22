@@ -18,7 +18,7 @@ jobs:
     executor:
       name: hugo/default
       hugo_version: "0.142.0"
-    resource_class: "large"
+    resource_class: "xlarge"
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
