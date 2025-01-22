@@ -71,9 +71,9 @@ workflows:
       - orb-tools/pack:
           filters: *filters
       - orb-tools/publish:
-          orb-name: circleci/hugo
-          vcs-type: << pipeline.project.type >>
-          pub-type: production
+          orb_name: circleci/hugo
+          vcs_type: << pipeline.project.type >>
+          pub_type: production
           requires:
             - orb-tools/pack
             - integration-test-hugo
