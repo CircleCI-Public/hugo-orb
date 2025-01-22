@@ -45,7 +45,7 @@ jobs:
           command: hugo version
   integration-test-macos:
     macos:
-      xcode: 14.1.0
+      xcode: 16.2.0
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
