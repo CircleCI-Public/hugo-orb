@@ -1,8 +1,8 @@
 description: "The cibuilds/hugo Docker image."
 parameters:
-  tag:
-    description: "The `cibuilds/hugo` Docker image version tag."
+  hugo_version:
+    description: "Specifies the hugo version to install"
     type: string
-    default: "latest"
+    default: "0.142.0"
 docker:
-  - image: cibuilds/hugo:<< parameters.tag >>
+  - image: cibuilds/hugo:<< parameters.hugo_version >>

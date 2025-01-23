@@ -1,20 +1,27 @@
 version: 2.1
 orbs:
-  hugo: circleci/hugo@dev:<<pipeline.git.revision>>
-  orb-tools: circleci/orb-tools@11.5
+  hugo: {}
+  orb-tools: circleci/orb-tools@12.3.0
+
 filters: &filters
   tags:
     only: /.*/
+
+release-filters: &release-filters
+  branches:
+    ignore: /.*/
+  tags:
+    only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
+
 jobs:
   integration-test-hugo:
     executor:
       name: hugo/default
-      tag: "0.120.4"
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
           command: |
-            git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
+            git clone --depth=1 "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm ~/project/content/en/content-management/related.md
       - hugo/hugo-build
       - run:
@@ -27,25 +34,25 @@ jobs:
       - run:
           name: "Check out Hugo Docs as a sample project."
           command: |
-            git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
+            git clone --depth=1 "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm ~/project/content/en/content-management/related.md
       - hugo/install:
-          version: "0.120.4"
+          version: "0.142.0"
       - hugo/hugo-build
       - run:
           name: "Basic Test"
           command: hugo version
   integration-test-macos:
     macos:
-      xcode: 14.1.0
+      xcode: 16.2.0
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
           command: |
-            git clone "https://github.com/gohugoio/hugoDocs.git" ~/project
+            git clone --depth=1 "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm ~/project/content/en/content-management/related.md
       - hugo/install:
-          version: "0.120.4"
+          version: "0.142.0"
       - hugo/hugo-build
       - run:
           name: "Basic Test"
@@ -63,9 +70,9 @@ workflows:
       - orb-tools/pack:
           filters: *filters
       - orb-tools/publish:
-          orb-name: circleci/hugo
-          vcs-type: << pipeline.project.type >>
-          pub-type: production
+          orb_name: circleci/hugo
+          vcs_type: << pipeline.project.type >>
+          pub_type: production
           requires:
             - orb-tools/pack
             - integration-test-hugo

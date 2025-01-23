@@ -42,7 +42,7 @@ parameters:
   check-html:
     description: "Enables HTML validation errors from Nokogiri (default: `false`)."
     type: boolean
-    default: true
+    default: false
   check-img-http:
     description: "Fails an image if it's marked as `http` (default: `false`)."
     type: boolean
@@ -62,7 +62,7 @@ parameters:
   disable-external:
     description: "If `true`, does not run the external link checker, which can take a lot of time (default: `false`)"
     type: boolean
-    default: true
+    default: false
   empty-alt-ignore:
     description: "If `true`, ignores images with empty alt tags"
     type: boolean

@@ -12,4 +12,4 @@ display:
   home_url: "https://gohugo.io/"
 
 orbs:
-  detect: circleci/os-detect@0.2
+  detect: circleci/os-detect@0.3.0
