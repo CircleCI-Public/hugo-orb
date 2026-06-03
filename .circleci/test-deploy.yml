@@ -63,8 +63,11 @@ jobs:
       - hugo/install:
           version: "0.162.1"
       - run:
-          name: "Install npm dependencies"
-          command: npm install --prefix ~/project
+          name: "Install Node.js and npm dependencies"
+          command: |
+            brew install node
+            echo 'export PATH="/usr/local/bin:$PATH"' >> "$BASH_ENV"
+            npm install --prefix ~/project
       - hugo/hugo-build
       - run:
           name: "Basic Test"
