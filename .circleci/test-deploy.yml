@@ -26,7 +26,8 @@ jobs:
       - run:
           name: "Install npm dependencies"
           command: |
-            sudo apt-get update -y && sudo apt-get install -y nodejs npm
+            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+            sudo apt-get install -y nodejs
             npm install --prefix ~/project
       - hugo/hugo-build
       - run:
