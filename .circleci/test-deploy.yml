@@ -63,10 +63,14 @@ jobs:
       - hugo/install:
           version: "0.162.1"
       - run:
-          name: "Install Node.js and npm dependencies"
+          name: "Install Node.js LTS and npm dependencies"
           command: |
-            brew install node
-            echo 'export PATH="/usr/local/bin:$PATH"' >> "$BASH_ENV"
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install --lts
+            nvm alias default lts/*
+            echo 'export NVM_DIR="$HOME/.nvm"' >> "$BASH_ENV"
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> "$BASH_ENV"
             npm install --prefix ~/project
       - hugo/hugo-build
       - run:
