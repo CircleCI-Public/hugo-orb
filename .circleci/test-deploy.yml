@@ -25,20 +25,25 @@ jobs:
             rm -f ~/project/content/en/content-management/related.md
       - run:
           name: "Install npm dependencies"
-          command: npm install --prefix ~/project
+          command: |
+            sudo apt-get update -y && sudo apt-get install -y nodejs npm
+            npm install --prefix ~/project
       - hugo/hugo-build
       - run:
           name: "Basic Test"
           command: hugo version
   integration-test-base:
     docker:
-      - image: cimg/base:current
+      - image: cimg/node:lts
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
           command: |
             git clone --depth=1 "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm -f ~/project/content/en/content-management/related.md
+      - run:
+          name: "Install npm dependencies"
+          command: npm install --prefix ~/project
       - hugo/install:
           version: "0.162.1"
       - hugo/hugo-build
@@ -56,6 +61,9 @@ jobs:
             rm -f ~/project/content/en/content-management/related.md
       - hugo/install:
           version: "0.162.1"
+      - run:
+          name: "Install npm dependencies"
+          command: npm install --prefix ~/project
       - hugo/hugo-build
       - run:
           name: "Basic Test"
