@@ -34,11 +34,12 @@ else
 fi
 
 HUGO_URL=https://github.com/gohugoio/hugo/releases/download/v${ORB_VAL_VERSION}/hugo${HUGO_EXTENDED}_${ORB_VAL_VERSION}_${OS}.${PKG_EXT}
-curl --fail -sSL "$HUGO_URL" -o /tmp/hugo-archive 2>/dev/null
+HUGO_ARCHIVE="/tmp/hugo-archive.${PKG_EXT}"
+curl --fail -sSL "$HUGO_URL" -o "$HUGO_ARCHIVE" 2>/dev/null
 # If the download fails...
 
 if [[ "$PKG_EXT" == "pkg" ]]; then
-    if sudo installer -pkg /tmp/hugo-archive -target / 2>/dev/null; then
+    if sudo installer -pkg "$HUGO_ARCHIVE" -target / 2>/dev/null; then
         echo "Hugo succesfully installed."
     else
         if [[ ! "${ORB_VAL_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
@@ -49,7 +50,7 @@ if [[ "$PKG_EXT" == "pkg" ]]; then
         fi
         exit 1
     fi
-elif $SUDO tar -xzf /tmp/hugo-archive -C "${ORB_EVAL_INSTALL_LOCATION}" hugo 2>/dev/null; then
+elif $SUDO tar -xzf "$HUGO_ARCHIVE" -C "${ORB_EVAL_INSTALL_LOCATION}" hugo 2>/dev/null; then
     echo "Hugo succesfully installed."
 else
     if [[ ! "${ORB_VAL_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
