@@ -23,6 +23,9 @@ jobs:
           command: |
             git clone --depth=1 "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm -f ~/project/content/en/content-management/related.md
+      - run:
+          name: "Install npm dependencies"
+          command: npm install --prefix ~/project
       - hugo/hugo-build
       - run:
           name: "Basic Test"
@@ -37,7 +40,7 @@ jobs:
             git clone --depth=1 "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm -f ~/project/content/en/content-management/related.md
       - hugo/install:
-          version: "0.142.0"
+          version: "0.162.1"
       - hugo/hugo-build
       - run:
           name: "Basic Test"
@@ -52,7 +55,7 @@ jobs:
             git clone --depth=1 "https://github.com/gohugoio/hugoDocs.git" ~/project
             rm -f ~/project/content/en/content-management/related.md
       - hugo/install:
-          version: "0.142.0"
+          version: "0.162.1"
       - hugo/hugo-build
       - run:
           name: "Basic Test"
