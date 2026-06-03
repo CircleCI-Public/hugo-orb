@@ -22,7 +22,7 @@ jobs:
           name: "Check out Hugo Docs as a sample project."
           command: |
             git clone --depth=1 "https://github.com/gohugoio/hugoDocs.git" ~/project
-            rm ~/project/content/en/content-management/related.md
+            rm -f ~/project/content/en/content-management/related.md
       - hugo/hugo-build
       - run:
           name: "Basic Test"
@@ -35,7 +35,7 @@ jobs:
           name: "Check out Hugo Docs as a sample project."
           command: |
             git clone --depth=1 "https://github.com/gohugoio/hugoDocs.git" ~/project
-            rm ~/project/content/en/content-management/related.md
+            rm -f ~/project/content/en/content-management/related.md
       - hugo/install:
           version: "0.142.0"
       - hugo/hugo-build
@@ -50,7 +50,7 @@ jobs:
           name: "Check out Hugo Docs as a sample project."
           command: |
             git clone --depth=1 "https://github.com/gohugoio/hugoDocs.git" ~/project
-            rm ~/project/content/en/content-management/related.md
+            rm -f ~/project/content/en/content-management/related.md
       - hugo/install:
           version: "0.142.0"
       - hugo/hugo-build
