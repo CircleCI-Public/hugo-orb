@@ -3,6 +3,6 @@ parameters:
   hugo_version:
     description: "Specifies the hugo version to install"
     type: string
-    default: "0.142.0"
+    default: "0.162.1"
 docker:
   - image: cibuilds/hugo:<< parameters.hugo_version >>

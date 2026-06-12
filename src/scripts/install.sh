@@ -8,7 +8,13 @@ case $OSD_FAMILY in
     ;;
     darwin)
     OS=darwin-universal
-    PKG_EXT=tar.gz
+    # Hugo 0.160.0+ ships macOS releases only as .pkg (no tar.gz)
+    IFS='.' read -r _major _minor _patch <<< "$ORB_VAL_VERSION"
+    if [[ "${_minor}" -ge 160 ]]; then
+        PKG_EXT=pkg
+    else
+        PKG_EXT=tar.gz
+    fi
     ;;
     *)
     echo "Unsupported operating system."
@@ -28,18 +34,30 @@ else
 fi
 
 HUGO_URL=https://github.com/gohugoio/hugo/releases/download/v${ORB_VAL_VERSION}/hugo${HUGO_EXTENDED}_${ORB_VAL_VERSION}_${OS}.${PKG_EXT}
-curl --fail -sSL "$HUGO_URL" -o hugo-archive 2>/dev/null
+HUGO_ARCHIVE="/tmp/hugo-archive.${PKG_EXT}"
+curl --fail -sSL "$HUGO_URL" -o "$HUGO_ARCHIVE" 2>/dev/null
 # If the download fails...
 
-if $SUDO tar -xzf hugo-archive -C "${ORB_EVAL_INSTALL_LOCATION}" hugo 2>/dev/null; then
+if [[ "$PKG_EXT" == "pkg" ]]; then
+    if sudo installer -pkg "$HUGO_ARCHIVE" -target / 2>/dev/null; then
+        echo "Hugo succesfully installed."
+    else
+        if [[ ! "${ORB_VAL_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            echo "Failed to install. The version number ${ORB_VAL_VERSION} is not a full valid SemVer version."
+        else
+            echo "Please choose a valid version from the Hugo tags page, without the leading 'v': https://github.com/gohugoio/hugo/tags"
+            echo "The download URL that failed was: ${HUGO_URL}"
+        fi
+        exit 1
+    fi
+elif $SUDO tar -xzf "$HUGO_ARCHIVE" -C "${ORB_EVAL_INSTALL_LOCATION}" hugo 2>/dev/null; then
     echo "Hugo succesfully installed."
 else
     if [[ ! "${ORB_VAL_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
-    echo "Failed to install. The version number ${ORB_VAL_VERSION} is not a full valid SemVer version."
+        echo "Failed to install. The version number ${ORB_VAL_VERSION} is not a full valid SemVer version."
     else
-    echo "Please choose a valid version from the Hugo tags page, without the leading 'v': https://github.com/gohugoio/hugo/tags"
-    echo "The download URL that failed was: ${HUGO_URL}"
+        echo "Please choose a valid version from the Hugo tags page, without the leading 'v': https://github.com/gohugoio/hugo/tags"
+        echo "The download URL that failed was: ${HUGO_URL}"
     fi
-
     exit 1
 fi

@@ -22,22 +22,31 @@ jobs:
           name: "Check out Hugo Docs as a sample project."
           command: |
             git clone --depth=1 "https://github.com/gohugoio/hugoDocs.git" ~/project
-            rm ~/project/content/en/content-management/related.md
+            rm -f ~/project/content/en/content-management/related.md
+      - run:
+          name: "Install npm dependencies"
+          command: |
+            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+            npm install --prefix ~/project
       - hugo/hugo-build
       - run:
           name: "Basic Test"
           command: hugo version
   integration-test-base:
     docker:
-      - image: cimg/base:current
+      - image: cimg/node:lts
     steps:
       - run:
           name: "Check out Hugo Docs as a sample project."
           command: |
             git clone --depth=1 "https://github.com/gohugoio/hugoDocs.git" ~/project
-            rm ~/project/content/en/content-management/related.md
+            rm -f ~/project/content/en/content-management/related.md
+      - run:
+          name: "Install npm dependencies"
+          command: npm install --prefix ~/project
       - hugo/install:
-          version: "0.142.0"
+          version: "0.162.1"
       - hugo/hugo-build
       - run:
           name: "Basic Test"
@@ -50,9 +59,19 @@ jobs:
           name: "Check out Hugo Docs as a sample project."
           command: |
             git clone --depth=1 "https://github.com/gohugoio/hugoDocs.git" ~/project
-            rm ~/project/content/en/content-management/related.md
+            rm -f ~/project/content/en/content-management/related.md
       - hugo/install:
-          version: "0.142.0"
+          version: "0.162.1"
+      - run:
+          name: "Install Node.js LTS and npm dependencies"
+          command: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install --lts
+            nvm alias default lts/*
+            echo 'export NVM_DIR="$HOME/.nvm"' >> "$BASH_ENV"
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> "$BASH_ENV"
+            npm install --prefix ~/project
       - hugo/hugo-build
       - run:
           name: "Basic Test"
